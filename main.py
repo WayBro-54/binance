@@ -22,8 +22,6 @@ async def percent_price_one_hour(session, timestamp, price):
         select(InfoEthusdt.price).where(InfoEthusdt.timestamp == timestamp)
     )
     price_old = price_old.scalar()
-    print(price_old)
-    print(price)
     if price_old:
         price_old = price_old
         percent = abs((Decimal(price) - price_old) / price_old * 100)
@@ -88,10 +86,10 @@ async def analysis_stoch(data):
     m5_k, m5_d = res[INDEX_FOR_5MIN]
     m15_k, m15_d = res[INDEX_FOR_15MIN]
 
-    if (m1_k >= m1_d >= 85) and (m5_k and m5_d >= 65) and (m15_k >= m15_d >= 85):
+    if (m1_k >= m1_d >= 83) and (m5_k and m5_d >= 65) and (m15_k >= m15_d >= 83):
         print('Рассматриваем вход в sell')
 
-    if (m1_k <= m1_d <= 15) and (m5_k and m5_d <= 35) and (m15_k <= m15_d <= 15):
+    if (m1_k <= m1_d <= 17) and (m5_k and m5_d <= 35) and (m15_k <= m15_d <= 17):
         print('Рассматриваем вход в buy')
 
 
@@ -135,6 +133,7 @@ async def analysis_eth(bm, client):
 
 
 async def get_history_price(client, session):
+    """Получаем историю баров"""
     end_time = datetime.utcnow()
     start_time = end_time - timedelta(hours=1)
     start_str = start_time.strftime('%Y-%m-%d %H:%M:%S')
@@ -157,7 +156,7 @@ async def get_history_price(client, session):
 
 
 async def get_price_eth(bm, session, client):
-
+    """Функция непрерывно считывает цену с биржи"""
     await get_history_price(client, session)
     ts_p = bm.kline_futures_socket('ETHUSDT', client.KLINE_INTERVAL_1MINUTE)
     async with ts_p as tsbm:
@@ -187,7 +186,7 @@ async def main():
     bm = BinanceSocketManager(client)
     async with AsyncSessionLocal() as session:
         await asyncio.gather(
-            # analysis_eth(bm, client),
+            analysis_eth(bm, client),
             get_price_eth(bm, session, client)
         )
 
