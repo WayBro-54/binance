@@ -20,10 +20,12 @@ git clone git@github.com:WayBro-54/binance.git
 ```
 
 #### Создайте в корневой папке файл .env
+Добавьте API ключи созданые на binance
 ```
 API_KEY=nbcX80iPChLIAJQRqBG4IDsiyM62uLEqsXYOuI4gyMgSWW2XQCTXHaLEjj4js4Qx
 SECRET_KEY=55vLHUNUQ0ICj2eFCQNul0aqBEGje3Dy8NpAGevur6OQP2K6iu6yj1loybLWN2yw
 ```
+
 #### Установка зависимостей
 ```
 python3 -m venv vev
